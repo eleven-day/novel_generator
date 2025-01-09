@@ -1,5 +1,4 @@
 import json
-import time
 
 def save_article(content: str, filename: str):
     """保存文章到文件"""
