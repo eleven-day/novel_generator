@@ -19,7 +19,7 @@ pip install -r requirements.txt
 ## Usage
 To generate a novel, run the following command:
 ```bash
-python generate.py
+python main.py
 ```
 
 ## Contributing
