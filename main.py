@@ -8,6 +8,18 @@ from content_generator import generate_paragraph
 from file_utils import save_article, save_mapping
 
 def main(topic: str):
+    """
+    Generates a final article based on the provided topic.
+    Steps:
+    1) Retrieves an outline for the topic.
+    2) Parses the outline into a list of outline items.
+    3) Generates paragraph content for each outline item.
+    4) Combines the outline items and their generated paragraphs into a final article.
+    5) Saves the final article to a text file with a timestamped filename.
+    6) Saves a mapping of outline items and corresponding content to a JSON file.
+    :param topic: The subject matter for which outline and article will be generated.
+    :return: None
+    """
     # 1. 获取大纲
     print("正在生成大纲...")
     outline_xml = get_outline(topic)
