@@ -11,7 +11,7 @@ NovelGen is a project aimed at generating creative and engaging novels using adv
 ## Installation
 To install the project, clone the repository and install the necessary dependencies:
 ```bash
-git clone https://github.com/yourusername/novelgen.git
+git clone https://github.com/eleven-day/novelgen.git
 cd novelgen
 pip install -r requirements.txt
 ```
