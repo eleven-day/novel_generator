@@ -1,29 +1,115 @@
-# NovelGen
+# 基于人物驱动的小说生成系统
 
-## Overview
-NovelGen is a project aimed at generating creative and engaging novels using advanced AI techniques.
+这是一个模块化的小说生成系统，使用LLM（大型语言模型）以人物为核心驱动小说情节发展。系统借鉴了游戏CK3的人物标签和事件触发机制，通过章节推进触发事件来逐步生成小说内容。
 
-## Features
-- AI-powered novel generation
-- Customizable story elements
-- User-friendly interface
+## 功能特点
 
-## Installation
-To install the project, clone the repository and install the necessary dependencies:
+- **人物为核心**：详细管理角色的特质、关系和状态，以角色互动驱动情节发展
+- **事件引擎**：基于章节推进触发事件，影响角色关系和状态变化
+- **结构化输出**：使用XML标签确保输出结构可解析
+- **高度可控性**：提供完整的中间件系统，方便修改/查询/编辑各个元素
+- **模块化设计**：各组件独立，易于自定义和扩展
+- **完整存储系统**：支持将小说保存为XML格式，方便后续加载和继续创作
+- **上下文管理**：支持设置全局和章节特定上下文，保持小说连贯性
+
+## 系统架构
+
+系统由以下核心模块组成：
+
+- **核心组件**：数据模型、LLM接口、事件引擎、叙事生成器
+- **中间件**：角色管理、事件管理、大纲管理、章节管理、上下文管理
+- **工具库**：XML处理、文件操作、日志系统
+- **用户界面**：命令行界面
+
+## 安装与准备
+
+### 安装依赖
+
 ```bash
-git clone https://github.com/eleven-day/novelgen.git
-cd novelgen
-pip install -r requirements.txt
+pip install openai python-dotenv
 ```
 
-## Usage
-To generate a novel, run the following command:
-```bash
+### 配置API密钥
+1. 在项目根目录创建.env文件
+2. 添加以下内容：
+
+
+## 使用方法
+运行主程序：
+```
 python main.py
 ```
 
-## Contributing
-We welcome contributions! Please read our [contributing guidelines](CONTRIBUTING.md) for more details.
 
-## License
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+## 基本工作流
+1. 创建小说：设置标题、类型和背景，可以选择生成角色和大纲
+2. 管理角色：手动创建或生成角色，编辑其特质和关系
+3. 管理事件：定义可能在故事中发生的事件
+4. 管理大纲：规划小说整体结构和关键转折点
+5. 生成章节：基于人物、事件和大纲生成章节内容
+6. 完善上下文：添加上下文信息，确保故事连贯性
+7. 保存与导出：将小说保存为XML格式或导出为纯文本
+
+
+## 功能菜单
+主菜单功能包括：
+1. 创建新小说
+2. 加载小说
+3. 管理角色：查看、创建、生成、编辑、删除角色及其关系
+4. 管理事件：查看、创建、生成、编辑、删除事件
+5. 管理大纲：查看、创建、生成、编辑大纲和情节弧
+6. 管理章节：查看、创建、生成、编辑、删除、重新生成章节
+7. 管理上下文：全局上下文和章节特定上下文的编辑
+8. 保存小说：将小说保存为XML格式
+9. 导出小说：将小说导出为可阅读的文本文件
+10. 设置：修改LLM模型等配置
+
+
+## 自定义与扩展
+
+### 修改提示词模板
+可在config/prompts.py中修改各功能的提示词模板，根据需要调整生成结果的风格和内容。
+
+### 添加新功能
+基于模块化设计，可以轻松添加新功能：
+
+1. 在相应的模块中添加新函数
+2. 在CLI中添加相应的菜单和交互逻辑
+3. 连接新功能与现有系统
+
+### 支持的文件格式
+- XML: 用于保存小说完整数据，包括角色、事件、章节等所有元素
+- TXT: 用于导出可阅读的纯文本格式小说
+
+
+## 系统目录结构
+```
+novel_generator/
+├── config/                  # 配置文件
+│   └── prompts.py           # 提示词配置
+├── core/                    # 核心模块
+│   ├── models.py            # 数据模型
+│   ├── llm_interface.py     # LLM接口
+│   ├── event_engine.py      # 事件引擎
+│   └── narrative_generator.py # 叙事生成器
+├── middleware/              # 中间件
+│   ├── character_manager.py # 角色管理
+│   ├── event_manager.py     # 事件管理
+│   ├── outline_manager.py   # 大纲管理
+│   ├── chapter_manager.py   # 章节管理
+│   └── context_manager.py   # 上下文管理
+├── utils/                   # 工具函数
+│   ├── xml_utils.py         # XML处理
+│   ├── file_utils.py        # 文件操作
+│   └── logger.py            # 日志
+├── ui/                      # 用户界面
+│   └── cli.py               # 命令行界面
+├── main.py                  # 主程序入口
+└── README.md                # 说明文档
+```
+
+## 注意事项
+生成内容质量和一致性取决于所使用的LLM模型
+默认使用GPT-4模型，可在设置中更改
+生成章节可能需要较长时间，请耐心等待
+建议定期保存您的作品，以防意外情况导致数据丢失

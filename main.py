@@ -1,65 +1,88 @@
+# main.py - 主程序入口
+
 import os
-import time
-import openai
+import sys
 from dotenv import load_dotenv
+from ui.cli import CLI
+from utils.logger import Logger
 
-from outline_manager import get_outline, parse_outline
-from content_generator import generate_paragraph
-from file_utils import save_article, save_mapping
+def check_dependencies():
+    """检查依赖项是否安装"""
+    required_packages = ['openai', 'python-dotenv']
+    missing_packages = []
+    
+    for package in required_packages:
+        try:
+            __import__(package)
+        except ImportError:
+            missing_packages.append(package)
+    
+    if missing_packages:
+        print("缺少以下依赖包，请安装：")
+        for package in missing_packages:
+            print(f"- {package}")
+        print("\n可以通过运行以下命令安装：")
+        print(f"pip install {' '.join(missing_packages)}")
+        return False
+    
+    return True
 
-def main(topic: str):
-    """
-    Generates a final article based on the provided topic.
-    Steps:
-    1) Retrieves an outline for the topic.
-    2) Parses the outline into a list of outline items.
-    3) Generates paragraph content for each outline item.
-    4) Combines the outline items and their generated paragraphs into a final article.
-    5) Saves the final article to a text file with a timestamped filename.
-    6) Saves a mapping of outline items and corresponding content to a JSON file.
-    :param topic: The subject matter for which outline and article will be generated.
-    :return: None
-    """
-    # 1. 获取大纲
-    print("正在生成大纲...")
-    outline_xml = get_outline(topic)
+def check_environment():
+    """检查环境变量"""
+    load_dotenv()
     
-    # 2. 解析大纲
-    outline_list = parse_outline(outline_xml)
-    if not outline_list:
-        print("大纲生成失败")
-        return
+    if not os.getenv("OPENAI_API_KEY"):
+        print("错误: 未设置OPENAI_API_KEY环境变量")
+        print("\n请通过以下方式之一设置API密钥：")
+        print("1. 创建.env文件并添加：OPENAI_API_KEY=your_api_key_here")
+        print("2. 在操作系统中设置环境变量OPENAI_API_KEY")
+        return False
     
-    # 3. 生成各段落内容
-    print("正在生成文章内容...")
-    content_dict = {}
-    for item in outline_list:
-        print(f"正在处理: {item}")
-        content = generate_paragraph(item)
-        content_dict[item] = content
-        time.sleep(1)  # 避免API请求过于频繁
+    return True
+
+def create_directories():
+    """创建必要的目录"""
+    dirs = ['saves', 'exports', 'logs']
     
-    # 4. 合并成最终文章
-    final_article = ""
-    for outline_item in outline_list:
-        final_article += f"{outline_item}\n\n"
-        final_article += f"{content_dict[outline_item]}\n\n"
+    for directory in dirs:
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+            print(f"已创建目录: {directory}")
+
+def main():
+    """主函数"""
+    print("=" * 60)
+    print("基于人物驱动的小说生成系统")
+    print("=" * 60)
     
-    # 5. 保存文章
-    timestamp = time.strftime("%Y%m%d_%H%M%S")
-    filename = f"article_{timestamp}.txt"
-    save_article(final_article, filename)
+    # 检查依赖
+    if not check_dependencies():
+        sys.exit(1)
     
-    # 6. 保存大纲和内容的映射关系
-    mapping_filename = f"article_mapping_{timestamp}.json"
-    save_mapping(content_dict, mapping_filename)
+    # 创建目录
+    create_directories()
+    
+    # 检查环境变量
+    if not check_environment():
+        sys.exit(1)
+    
+    # 创建日志
+    logger = Logger()
+    logger.info("程序启动")
+    
+    try:
+        # 启动CLI
+        cli = CLI()
+        cli.run()
+    except KeyboardInterrupt:
+        print("\n程序被用户中断")
+        logger.info("程序被用户中断")
+    except Exception as e:
+        print(f"\n程序出现错误: {e}")
+        logger.error(f"程序出现错误: {e}")
+    finally:
+        logger.info("程序结束")
+        print("\n程序已结束")
 
 if __name__ == "__main__":
-    # 先加载 .env 中的环境变量
-    load_dotenv()
-
-    # 在加载后，使用读取到的环境变量来设置 openai.api_key
-    openai.api_key = os.getenv("OPENAI_API_KEY")
-
-    topic = input("请输入文章主题：")
-    main(topic)
+    main()
