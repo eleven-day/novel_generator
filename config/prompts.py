@@ -1,32 +1,32 @@
-# config/prompts.py - 提示词配置
+# config/prompts.py - Prompt configurations
 
 CHARACTER_CREATION_PROMPT = """
-<task>请为一部{genre}类型的小说生成一个有深度的角色。</task>
+<task>Please generate a deep character for a novel in the {genre} genre.</task>
 <background>{background_info}</background>
 <context>{context}</context>
 <output_format>
-请以下面的XML格式回复:
+Please reply in the following XML format:
 <character>
-    <name>角色名</name>
-    <age>年龄</age>
-    <gender>性别</gender>
-    <background>详细的背景故事</background>
-    <appearance>外貌描述</appearance>
+    <name>Character name</name>
+    <age>Age</age>
+    <gender>Gender</gender>
+    <background>Detailed background story</background>
+    <appearance>Appearance description</appearance>
     <personality>
-        <trait name="勇气">0.7</trait>
-        <trait name="智慧">0.5</trait>
-        <!-- 至少生成5个性格特征 -->
+        <trait name="Courage">0.7</trait>
+        <trait name="Wisdom">0.5</trait>
+        <!-- Generate at least 5 personality traits -->
     </personality>
     <goals>
-        <goal>角色的主要目标或动机</goal>
-        <!-- 可以有多个 -->
+        <goal>Character's main goal or motivation</goal>
+        <!-- Can have multiple -->
     </goals>
 </character>
 </output_format>
 """
 
 EVENT_GENERATION_PROMPT = """
-<task>请为小说生成一系列潜在的事件，这些事件会在故事推进中触发。</task>
+<task>Please generate a series of potential events that will trigger during story progression for the novel.</task>
 <novel_info>
     <title>{title}</title>
     <genre>{genre}</genre>
@@ -38,29 +38,29 @@ EVENT_GENERATION_PROMPT = """
 </characters>
 <context>{context}</context>
 <output_format>
-请生成{num_events}个潜在事件，以下面的XML格式回复:
+Please generate {num_events} potential events, replying in the following XML format:
 <events>
     <event>
         <id>event_id</id>
-        <name>事件名称</name>
-        <description>事件描述</description>
+        <name>Event name</name>
+        <description>Event description</description>
         <triggers>
-            <trigger type="character_relation" value="朋友"/>
-            <!-- 其他触发条件 -->
+            <trigger type="character_relation" value="Friend"/>
+            <!-- Other trigger conditions -->
         </triggers>
         <effects>
             <effect target="character_relation" value="0.2"/>
-            <!-- 其他效果 -->
+            <!-- Other effects -->
         </effects>
-        <narrative_template>这个事件在小说中的叙述模板，使用{character_name}作为占位符</narrative_template>
+        <narrative_template>The narrative template for this event in the novel, using {character_name} as a placeholder</narrative_template>
     </event>
-    <!-- 更多事件 -->
+    <!-- More events -->
 </events>
 </output_format>
 """
 
 CHAPTER_GENERATION_PROMPT = """
-<task>请为小说生成第{chapter_number}章的内容。</task>
+<task>Please generate the content for Chapter {chapter_number} of the novel.</task>
 <novel_info>
     <title>{title}</title>
     <genre>{genre}</genre>
@@ -76,21 +76,21 @@ CHAPTER_GENERATION_PROMPT = """
 </events>
 <context>{context}</context>
 <output_format>
-请生成完整的章节内容，以下面的XML格式回复:
+Please generate complete chapter content, replying in the following XML format:
 <chapter>
-    <title>章节标题</title>
+    <title>Chapter title</title>
     <content>
-        详细的章节内容，注重人物互动、关系发展和情节推进。请至少包含2000字的内容。
+        Detailed chapter content, focusing on character interactions, relationship development, and plot progression. Please include at least 2000 words of content.
     </content>
     <summary>
-        章节的简要总结，用于下一章的衔接
+        Brief summary of the chapter for continuity with the next chapter
     </summary>
 </chapter>
 </output_format>
 """
 
 OUTLINE_GENERATION_PROMPT = """
-<task>请为一部{genre}类型的小说生成一个完整的故事大纲。</task>
+<task>Please generate a complete story outline for a novel in the {genre} genre.</task>
 <novel_info>
     <title>{title}</title>
     <setting>{setting}</setting>
@@ -100,40 +100,40 @@ OUTLINE_GENERATION_PROMPT = """
 </characters>
 <context>{context}</context>
 <output_format>
-请以下面的XML格式回复:
+Please reply in the following XML format:
 <outline>
-    <overview>故事的整体概述和核心冲突</overview>
+    <overview>Overall story overview and core conflict</overview>
     <arc>
-        <name>开端</name>
-        <description>详细描述故事的开端阶段，包括世界设定、角色介绍和初始冲突</description>
+        <name>Beginning</name>
+        <description>Detailed description of the story's beginning stage, including world-building, character introductions, and initial conflicts</description>
         <key_events>
-            <event>关键事件1</event>
-            <event>关键事件2</event>
-            <!-- 可以有多个 -->
+            <event>Key event 1</event>
+            <event>Key event 2</event>
+            <!-- Can have multiple -->
         </key_events>
     </arc>
     <arc>
-        <name>发展</name>
-        <description>故事的发展阶段，冲突加剧</description>
+        <name>Development</name>
+        <description>The development stage of the story, conflicts intensify</description>
         <key_events>
-            <event>关键事件3</event>
-            <event>关键事件4</event>
+            <event>Key event 3</event>
+            <event>Key event 4</event>
         </key_events>
     </arc>
     <arc>
-        <name>高潮</name>
-        <description>故事达到高潮，主要冲突面临解决</description>
+        <name>Climax</name>
+        <description>The story reaches its climax, main conflicts face resolution</description>
         <key_events>
-            <event>关键事件5</event>
-            <event>关键事件6</event>
+            <event>Key event 5</event>
+            <event>Key event 6</event>
         </key_events>
     </arc>
     <arc>
-        <name>结局</name>
-        <description>故事的结局和收尾</description>
+        <name>Ending</name>
+        <description>The story's conclusion and wrap-up</description>
         <key_events>
-            <event>关键事件7</event>
-            <event>关键事件8</event>
+            <event>Key event 7</event>
+            <event>Key event 8</event>
         </key_events>
     </arc>
 </outline>
